@@ -11,6 +11,7 @@ public sealed class PlayerController : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private EntityMovement movement;
+    [SerializeField] private PlayerInventory inventory;
 
     [Header("Input System")]
     [SerializeField] private InputActionReference moveAction;
@@ -20,19 +21,26 @@ public sealed class PlayerController : MonoBehaviour
     [SerializeField] private Transform relativeTo;
 
     private Vector2 cachedInput;
+    private Camera mainCamera;
 
     private void Reset()
     {
         movement = GetComponent<EntityMovement>();
+        inventory = GetComponent<PlayerInventory>();
     }
 
     private void Awake()
     {
         if (movement == null)
             movement = GetComponent<EntityMovement>();
+        
+        if (inventory == null)
+            inventory = GetComponent<PlayerInventory>();
 
         if (movement != null)
             movement.RelativeTo = relativeTo;
+            
+        mainCamera = Camera.main;
     }
 
     private void OnEnable()
@@ -57,6 +65,32 @@ public sealed class PlayerController : MonoBehaviour
             cachedInput = moveAction.action.ReadValue<Vector2>();
             cachedInput = Vector2.ClampMagnitude(cachedInput, 1f);
         }
+
+        HandleAiming();
+    }
+
+    private void HandleAiming()
+    {
+        if (movement == null) return;
+
+        bool isPistolEquipped = inventory != null && inventory.CurrentCarryItem is PistolItem;
+
+        if (isPistolEquipped && mainCamera != null && Mouse.current != null)
+        {
+            Vector2 mouseScreenPos = Mouse.current.position.ReadValue();
+            Ray ray = mainCamera.ScreenPointToRay(mouseScreenPos);
+
+            // Plane at player's height to intersect with mouse ray
+            Plane plane = new Plane(Vector3.up, new Vector3(0, transform.position.y, 0));
+            if (plane.Raycast(ray, out float enter))
+            {
+                Vector3 hitPoint = ray.GetPoint(enter);
+                movement.SetLookAtPosition(hitPoint);
+                return;
+            }
+        }
+
+        movement.SetLookAtPosition(null);
     }
 
     private void FixedUpdate()

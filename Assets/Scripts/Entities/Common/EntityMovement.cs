@@ -39,6 +39,7 @@ public sealed class EntityMovement : MonoBehaviour
     private bool hasInput;
     private bool isDragging;
     private Transform draggingTarget;
+    private Vector3? lookAtPosition;
 
     public bool IsDragging => isDragging;
 
@@ -58,6 +59,11 @@ public sealed class EntityMovement : MonoBehaviour
     {
         isDragging = dragging;
         draggingTarget = target;
+    }
+
+    public void SetLookAtPosition(Vector3? pos)
+    {
+        lookAtPosition = pos;
     }
 
     private void Awake()
@@ -117,7 +123,11 @@ public sealed class EntityMovement : MonoBehaviour
     {
         Vector3 targetDir = Vector3.zero;
 
-        if (isDragging && draggingTarget != null)
+        if (lookAtPosition.HasValue)
+        {
+            targetDir = lookAtPosition.Value - rb.position;
+        }
+        else if (isDragging && draggingTarget != null)
         {
             targetDir = draggingTarget.position - rb.position;
         }
