@@ -32,7 +32,7 @@ public sealed class BuriedReviveSpot : MonoBehaviour, IInteractable
     {
         if (buriedPlayer == null) return false;
         if (buriedPlayer.State != PlayerHealth.LifeState.Buried) return false;
-        return interactor != null && interactor.Inventory != null && interactor.Inventory.HasItemOfType<ShovelItem>();
+        return interactor != null && interactor.Inventory != null && interactor.Inventory.HasItem<ShovelItem>();
     }
 
     public void Interact(PlayerInteractor interactor)
@@ -50,7 +50,7 @@ public sealed class BuriedReviveSpot : MonoBehaviour, IInteractable
             return;
 
         // Must keep shovel equipped.
-        if (currentDigger.Inventory == null || !currentDigger.Inventory.HasItemOfType<ShovelItem>())
+        if (currentDigger.Inventory == null || !currentDigger.Inventory.HasItem<ShovelItem>())
             return;
 
         progress += Time.deltaTime;
