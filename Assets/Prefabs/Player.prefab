@@ -97,7 +97,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5f94765d11de049d9b5a54329fa071b3, type: 3}
       propertyPath: m_Name
-      value: character-keeper
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5f94765d11de049d9b5a54329fa071b3, type: 3}
       propertyPath: m_Layer
@@ -208,11 +208,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1748920150501733147}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e265083db05049f5be73978d01de2bd, type: 3}
+  m_Script: {fileID: 11500000, guid: 9e9333f48cd594b578da2c3591129b5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EntityAnimation
   animator: {fileID: 6302176271338845779}
-  smoothSpeed: 15
+  smoothSpeed: 5
   speedDivisor: 6
   meshTransform: {fileID: 1345306495890020935}
   bobCurve:
@@ -221,35 +221,26 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 1.9992938
-      outSlope: 1.9992938
-      tangentMode: 34
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.5001766
-      value: 1
-      inSlope: -0.00070643425
-      outSlope: -0.00070643425
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      outWeight: 0
     - serializedVersion: 3
       time: 1
-      value: 0
-      inSlope: -2.0007067
-      outSlope: -2.0007067
-      tangentMode: 34
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
+      inWeight: 0
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  bobHeight: 0.2
-  bobSpeed: 5.7
+  bobHeight: 0.1
+  bobSpeed: 8
 --- !u!114 &6578808804509547293
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -276,8 +267,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInteractor
   inventory: {fileID: 6578808804509547293}
-  interactAction: {fileID: 0}
-  interactRadius: 1.6
+  movement: {fileID: 7799067077284523745}
+  interactInput: {fileID: 0}
+  dropInput: {fileID: 0}
+  interactRadius: 1
   interactMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -294,6 +287,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   maxHealth: 100
+  healthBarPrefab: {fileID: 4534322761592661996, guid: 8e1a6119f0feb45aaa06d20ddffc86c0, type: 3}
   buryDelay: 3
   disableWhenBuried:
   - {fileID: 5955234088599688754}
@@ -357,7 +351,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1748920150501733147}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
+  m_Avatar: {fileID: 9000000, guid: 5f94765d11de049d9b5a54329fa071b3, type: 3}
   m_Controller: {fileID: 9100000, guid: d411d64827bab4bfc8ec680999094040, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0

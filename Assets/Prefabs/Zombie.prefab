@@ -71,6 +71,9 @@ PrefabInstance:
       addedObject: {fileID: 6865504384024175658}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 915df4660fbb44bec93840ffe417064d, type: 3}
       insertIndex: -1
+      addedObject: {fileID: -8748815226754512514}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 915df4660fbb44bec93840ffe417064d, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 8820163341325812010}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 915df4660fbb44bec93840ffe417064d, type: 3}
       insertIndex: -1
@@ -146,11 +149,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6847936692083518064}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e265083db05049f5be73978d01de2bd, type: 3}
+  m_Script: {fileID: 11500000, guid: 9e9333f48cd594b578da2c3591129b5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EntityAnimation
   animator: {fileID: 1042495037168937089}
-  smoothSpeed: 15
+  smoothSpeed: 5
   speedDivisor: 6
   meshTransform: {fileID: 0}
   bobCurve:
@@ -159,35 +162,40 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 1.9992938
-      outSlope: 1.9992938
-      tangentMode: 34
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.5001766
-      value: 1
-      inSlope: -0.00070643425
-      outSlope: -0.00070643425
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      outWeight: 0
     - serializedVersion: 3
       time: 1
-      value: 0
-      inSlope: -2.0007067
-      outSlope: -2.0007067
-      tangentMode: 34
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
+      inWeight: 0
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  bobHeight: 0.1
-  bobSpeed: 5.7
+  bobHeight: 0.05
+  bobSpeed: 8
+--- !u!114 &-8748815226754512514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6847936692083518064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8caf5f2903db14199b2809e38e316187, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EntityHealth
+  maxHealth: 100
+  healthBarPrefab: {fileID: 4534322761592661996, guid: 8e1a6119f0feb45aaa06d20ddffc86c0, type: 3}
 --- !u!114 &8820163341325812010
 MonoBehaviour:
   m_ObjectHideFlags: 0
