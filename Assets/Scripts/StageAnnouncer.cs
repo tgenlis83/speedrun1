@@ -10,6 +10,6 @@ public class StageAnnouncer : MonoBehaviour
     public void SetText(string text)
     {
         announcementText.text = $"<color=white>~</color> {text} <color=white>~</color>";
-        animator.SetTrigger("Show");
+        animator.Play("ObjectiveDisplay_Show");
     }
 }

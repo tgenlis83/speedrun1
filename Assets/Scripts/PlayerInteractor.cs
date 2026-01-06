@@ -8,12 +8,14 @@ public sealed class PlayerInteractor : MonoBehaviour
 {
     [Header("Refs")]
     [SerializeField] private PlayerInventory inventory;
+    [SerializeField] private EntityMovement movement;
 
     [Header("Input System")]
-    [SerializeField] private InputActionReference interactAction;
+    [SerializeField] private InputActionReference interactInput;
+    [SerializeField] private InputActionReference dropInput;
 
     [Header("Scan")]
-    [SerializeField, Min(0.25f)] private float interactRadius = 1.6f;
+    [SerializeField, Min(0.25f)] private float interactRadius = 1.0f;
     [SerializeField] private LayerMask interactMask = ~0;
 
     public PlayerInventory Inventory => inventory;
@@ -24,27 +26,56 @@ public sealed class PlayerInteractor : MonoBehaviour
     private void Reset()
     {
         inventory = GetComponent<PlayerInventory>();
+        movement = GetComponent<EntityMovement>();
     }
 
     private void OnEnable()
     {
-        if (interactAction != null) interactAction.action.Enable();
+        if (interactInput != null) interactInput.action.Enable();
+        if (dropInput != null) dropInput.action.Enable();
     }
 
     private void OnDisable()
     {
-        if (interactAction != null) interactAction.action.Disable();
+        if (interactInput != null) interactInput.action.Disable();
+        if (dropInput != null) dropInput.action.Disable();
     }
 
     private void Update()
     {
-        InteractHeld = interactAction != null && interactAction.action.IsPressed();
+        HandleInteraction();
+        HandleDropping();
+    }
 
-        if (interactAction != null && interactAction.action.WasPressedThisFrame())
+    private void HandleInteraction()
+    {
+        InteractHeld = interactInput != null && interactInput.action.IsPressed();
+
+        if (interactInput != null && interactInput.action.WasPressedThisFrame())
         {
             IInteractable best = FindBestInteractable();
             if (best != null && best.CanInteract(this))
+            {
+                if (movement != null && movement.IsDragging)
+                {
+                    if (!(best is Coffin)) return;
+                }
+
                 best.Interact(this);
+            }
+        }
+    }
+
+    private void HandleDropping()
+    {
+        if (movement != null && movement.IsDragging) return;
+
+        if (dropInput != null && dropInput.action.WasPressedThisFrame())
+        {
+            if (inventory != null && inventory.HasCarryItem)
+            {
+                inventory.DropHeldItem();
+            }
         }
     }
 
