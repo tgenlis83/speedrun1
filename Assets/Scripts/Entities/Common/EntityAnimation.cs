@@ -24,6 +24,7 @@ public class EntityAnimation : MonoBehaviour
     private int stateGunHash;
     private int stateToolHash;
     private int stateDraggingHash;
+    private int stateDeadHash;
     private int eventShootHash;
     private int eventPickHash;
     private int eventThrowHash;
@@ -40,6 +41,7 @@ public class EntityAnimation : MonoBehaviour
             stateGunHash = Animator.StringToHash("StateGun");
             stateToolHash = Animator.StringToHash("StateTool");
             stateDraggingHash = Animator.StringToHash("StateDragging");
+            stateDeadHash = Animator.StringToHash("StateDead");
             eventShootHash = Animator.StringToHash("EventShoot");
             eventPickHash = Animator.StringToHash("EventPick");
             eventThrowHash = Animator.StringToHash("EventThrow");
@@ -57,6 +59,13 @@ public class EntityAnimation : MonoBehaviour
     private void UpdateUpperLayerWeight()
     {
         if (animator == null || upperLayerIndex == -1) return;
+
+        // If dead, force upper body layer off so death animation plays cleanly
+        if (animator.GetBool(stateDeadHash))
+        {
+            animator.SetLayerWeight(upperLayerIndex, 0f);
+            return;
+        }
 
         var stateInfo = animator.GetCurrentAnimatorStateInfo(upperLayerIndex);
         bool isNeutral = stateInfo.IsName("Neutral");
@@ -91,6 +100,7 @@ public class EntityAnimation : MonoBehaviour
     public void SetGunState(bool active) => animator?.SetBool(stateGunHash, active);
     public void SetToolState(bool active) => animator?.SetBool(stateToolHash, active);
     public void SetDraggingState(bool active) => animator?.SetBool(stateDraggingHash, active);
+    public void SetDeadState(bool active) => animator?.SetBool(stateDeadHash, active);
     public void TriggerShoot() => animator?.SetTrigger(eventShootHash);
     public void TriggerPick() => animator?.SetTrigger(eventPickHash);
     public void TriggerThrow() => animator?.SetTrigger(eventThrowHash);
@@ -98,30 +108,36 @@ public class EntityAnimation : MonoBehaviour
 
     void LateUpdate()
     {
+        if (meshTransform == null) return;
         // Apply walk bob AFTER animator updates (additive, non-destructive)
-        if (meshTransform != null && currentMoveValue > 0.1f)
+        if (currentMoveValue > 0.001f)
         {
-            bobTime += Time.deltaTime * bobSpeed * currentSpeedValue;
-            float bobOffset = bobCurve.Evaluate(bobTime % 1f) * bobHeight;
+            float inertia = currentMoveValue * lastSpeed / speedDivisor;
+            bobTime += Time.deltaTime * bobSpeed * inertia;
+            float bobOffset = bobCurve.Evaluate(bobTime) * bobHeight * inertia;
+
+            if (bobTime >= 1f)
+                bobTime = 0f;
             
             // Apply bob on top of whatever the animator did
             Vector3 currentPos = meshTransform.localPosition;
             meshTransform.localPosition = new Vector3(currentPos.x, startLocalPosition.y + bobOffset, currentPos.z);
         }
-        else if (meshTransform != null && bobTime > 0f)
+        else if (bobTime > 0f)
         {
-            // Smoothly reset bob when stopping
             bobTime = 0f;
             Vector3 currentPos = meshTransform.localPosition;
             meshTransform.localPosition = new Vector3(currentPos.x, startLocalPosition.y, currentPos.z);
         }
     }
 
+    float lastSpeed;
     public void SetFloats(float move, float speed)
     {
         if (speed < 0.05f) move = 0f;
         currentMoveValue = Mathf.Lerp(currentMoveValue, move, Time.deltaTime * smoothSpeed);
         if (move < 0.05f) speed = speedDivisor;
         currentSpeedValue = Mathf.Lerp(currentSpeedValue, speed / speedDivisor, Time.deltaTime * smoothSpeed);
+        lastSpeed = speed;
     }
 }
