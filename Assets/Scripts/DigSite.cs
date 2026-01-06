@@ -32,7 +32,7 @@ public sealed class DigSite : MonoBehaviour, IInteractable
         if (completed) return false;
         if (interactor == null || interactor.Inventory == null) return false;
 
-        if (requiresShovel && !interactor.Inventory.HasItemOfType<ShovelItem>())
+        if (requiresShovel && !interactor.Inventory.HasItem<ShovelItem>())
             return false;
 
         return true;
@@ -50,7 +50,19 @@ public sealed class DigSite : MonoBehaviour, IInteractable
             OnDigStarted?.Invoke();
         }
 
-        if (digVfx != null) digVfx.SetActive(true);
+        if (digVfx != null)
+        {
+            digVfx.SetActive(true);
+            var anim = interactor.GetComponent<EntityAnimation>();
+            if (anim != null) anim.SetToolState(true);
+        }
+    }
+
+    private void StopDigging()
+    {
+        if (digVfx != null) digVfx.SetActive(false);
+        var anim = currentDigger.GetComponent<EntityAnimation>();
+        if (anim != null) anim.SetToolState(false);
     }
 
     private void Update()
@@ -61,13 +73,13 @@ public sealed class DigSite : MonoBehaviour, IInteractable
         // Must hold interact to keep digging (good tension).
         if (!currentDigger.InteractHeld)
         {
-            if (digVfx != null) digVfx.SetActive(false);
+            StopDigging();
             return;
         }
 
-        if (requiresShovel && (currentDigger.Inventory == null || !currentDigger.Inventory.HasItemOfType<ShovelItem>()))
+        if (requiresShovel && (currentDigger.Inventory == null || !currentDigger.Inventory.HasItem<ShovelItem>()))
         {
-            if (digVfx != null) digVfx.SetActive(false);
+            StopDigging();
             return;
         }
 
@@ -76,7 +88,7 @@ public sealed class DigSite : MonoBehaviour, IInteractable
         if (progress >= digDuration)
         {
             completed = true;
-            if (digVfx != null) digVfx.SetActive(false);
+            StopDigging();
             OnDigCompleted?.Invoke();
         }
     }
