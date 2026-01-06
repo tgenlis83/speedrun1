@@ -16,6 +16,11 @@ public sealed class CollectibleItem : MonoBehaviour, IItem
         return interactor != null && interactor.Inventory != null;
     }
 
+    public void OnUse(PlayerInventory owner)
+    {
+        // Default: do nothing
+    }
+
     public void Interact(PlayerInteractor interactor)
     {
         if (CanInteract(interactor))

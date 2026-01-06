@@ -12,6 +12,7 @@ public sealed class PlayerInteractor : MonoBehaviour
 
     [Header("Input System")]
     [SerializeField] private InputActionReference interactInput;
+    [SerializeField] private InputActionReference useInput;
     [SerializeField] private InputActionReference dropInput;
 
     [Header("Scan")]
@@ -33,18 +34,21 @@ public sealed class PlayerInteractor : MonoBehaviour
     {
         if (interactInput != null) interactInput.action.Enable();
         if (dropInput != null) dropInput.action.Enable();
+        if (useInput != null) useInput.action.Enable();
     }
 
     private void OnDisable()
     {
         if (interactInput != null) interactInput.action.Disable();
         if (dropInput != null) dropInput.action.Disable();
+        if (useInput != null) useInput.action.Disable();
     }
 
     private void Update()
     {
         HandleInteraction();
         HandleDropping();
+        HandleUse();
     }
 
     private void HandleInteraction()
@@ -62,6 +66,19 @@ public sealed class PlayerInteractor : MonoBehaviour
                 }
 
                 best.Interact(this);
+            }
+        }
+    }
+
+    private void HandleUse()
+    {
+        if (movement != null && movement.IsDragging) return;
+
+        if (useInput != null && useInput.action.WasPressedThisFrame())
+        {
+            if (inventory != null && inventory.HasCarryItem)
+            {
+                inventory.UseHeldItem();
             }
         }
     }

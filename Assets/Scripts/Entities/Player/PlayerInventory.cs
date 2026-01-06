@@ -61,6 +61,16 @@ public sealed class PlayerInventory : MonoBehaviour
         OnItemDropped?.Invoke(item);
     }
 
+    /// <summary>
+    /// Uses the currently held item, if any.
+    /// </summary>
+    public void UseHeldItem()
+    {
+        if (CurrentCarryItem == null) return;
+
+        CurrentCarryItem.OnUse(this);
+    }
+
     public bool HasCollectible<T>() where T : class, IItem
     {
         foreach (var item in collectibles)

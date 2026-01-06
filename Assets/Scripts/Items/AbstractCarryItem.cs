@@ -25,6 +25,11 @@ public abstract class AbstractCarryItem : MonoBehaviour, IItem
         interactor.Inventory.Equip(this);
     }
 
+    public virtual void OnUse(PlayerInventory owner)
+    {
+        // Default: do nothing
+    }
+
     // --- IItem ---
     public virtual void OnEquip(PlayerInventory owner)
     {
