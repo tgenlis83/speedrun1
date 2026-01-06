@@ -37,6 +37,10 @@ public sealed class EntityMovement : MonoBehaviour
     private Rigidbody rb;
     private Vector2 moveInput; // raw input (-1..1)
     private bool hasInput;
+    private bool isDragging;
+    private Transform draggingTarget;
+
+    public bool IsDragging => isDragging;
 
     public float MoveSpeed
     {
@@ -48,6 +52,12 @@ public sealed class EntityMovement : MonoBehaviour
     {
         get => relativeTo;
         set => relativeTo = value;
+    }
+
+    public void SetDragging(bool dragging, Transform target = null)
+    {
+        isDragging = dragging;
+        draggingTarget = target;
     }
 
     private void Awake()
@@ -105,17 +115,25 @@ public sealed class EntityMovement : MonoBehaviour
 
     private void RotateFixed()
     {
-        if (!hasInput) return;
+        Vector3 targetDir = Vector3.zero;
 
-        // Only rotate if direction is meaningful.
-        if (moveInput.magnitude < rotateDeadzone) return;
+        if (isDragging && draggingTarget != null)
+        {
+            targetDir = draggingTarget.position - rb.position;
+        }
+        else if (hasInput && moveInput.magnitude >= rotateDeadzone)
+        {
+            targetDir = GetWorldMoveDirection(moveInput);
+        }
 
-        Vector3 dir = GetWorldMoveDirection(moveInput);
-        if (dir.sqrMagnitude < 0.0001f) return;
+        targetDir.y = 0f;
 
-        Quaternion targetRot = Quaternion.LookRotation(dir, Vector3.up);
-        Quaternion newRot = Quaternion.RotateTowards(rb.rotation, targetRot, turnSpeedDeg * Time.fixedDeltaTime);
-        rb.MoveRotation(newRot);
+        if (targetDir.sqrMagnitude > 0.001f)
+        {
+            Quaternion targetRot = Quaternion.LookRotation(targetDir, Vector3.up);
+            Quaternion newRot = Quaternion.RotateTowards(rb.rotation, targetRot, turnSpeedDeg * Time.fixedDeltaTime);
+            rb.MoveRotation(newRot);
+        }
     }
 
     private Vector3 GetWorldMoveDirection(Vector2 input)
