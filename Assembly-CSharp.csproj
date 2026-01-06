@@ -55,11 +55,12 @@
     <Compile Include="Assets/Scripts/ShovelItem.cs" />
     <Compile Include="Assets/Scripts/StageAnnouncer.cs" />
     <Compile Include="Assets/Scripts/AIController.cs" />
+    <Compile Include="Assets/Scripts/CollectibleItem.cs" />
     <Compile Include="Assets/Scripts/PlayerHealth.cs" />
     <Compile Include="Assets/Scripts/PlayerController.cs" />
     <Compile Include="Assets/Scripts/DigSite.cs" />
     <Compile Include="Assets/Scripts/PlayerRegistry.cs" />
-    <Compile Include="Assets/Scripts/ItemPickup.cs" />
+    <Compile Include="Assets/Scripts/AbstractCarryItem.cs" />
     <Compile Include="Assets/Scripts/PlayerInteractor.cs" />
     <Compile Include="Assets/Scripts/EntityMovement.cs" />
     <Compile Include="Assets/Scripts/CameraTeleporter.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="Assets/Scripts/GameStage.cs" />
     <Compile Include="Assets/Scripts/ZombieBrain.cs" />
     <Compile Include="Assets/Scripts/PlayerInventory.cs" />
+    <Compile Include="Assets/Scripts/PistolItem.cs" />
     <Compile Include="Assets/Scripts/BuriedReviveSpot.cs" />
     <Compile Include="Assets/Scripts/EntityAnimation.cs" />
     <Compile Include="Assets/Scripts/ItemPickupAnimation.cs" />
@@ -84,6 +86,7 @@
     <None Include="Assets/Assets/kenney_ui-pack-adventure/Spritesheet/spritesheet-double.xml" />
     <None Include="Assets/TextMesh Pro/Shaders/TMP_Bitmap.shader" />
     <None Include="Assets/TextMesh Pro/Shaders/TMPro_Mobile.cginc" />
+    <None Include="Assets/Assets/kenney_blaster-kit_2.1/License.txt" />
     <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF SSD.shader" />
     <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets/Assets/kenney_ui-pack-adventure/License.txt" />
@@ -1407,12 +1410,12 @@
       <HintPath>Library/ScriptAssemblies/Unity.ShaderGraph.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.RenderPipelines.Core.Editor.Shared">
-      <HintPath>Library/ScriptAssemblies/Unity.RenderPipelines.Core.Editor.Shared.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.2D.Sprite.AIIntegration.Editor">
       <HintPath>Library/ScriptAssemblies/Unity.2D.Sprite.AIIntegration.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Core.Editor.Shared">
+      <HintPath>Library/ScriptAssemblies/Unity.RenderPipelines.Core.Editor.Shared.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.InputSystem">
