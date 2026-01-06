@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ItemPickupAnimation : MonoBehaviour
 {
-    [SerializeField] private AnimationCurve swayCurve = AnimationCurve.Linear(0, -1, 1, 1);
+    [SerializeField] private AnimationCurve swayCurve;
     [SerializeField] private float swayAmplitude = 0.5f;
     [SerializeField] private float swayFrequency = 1f;
     [SerializeField] private float rotationSpeed = 30f;
@@ -10,12 +10,30 @@ public class ItemPickupAnimation : MonoBehaviour
     private float positionOffset;
     private float currentCycleTime;
     private Vector3 previousOffset;
+    private float initialY;
 
-    void Start()
+    private void Reset()
     {
         positionOffset = transform.position.x + transform.position.z;
         currentCycleTime = positionOffset;
         previousOffset = Vector3.zero;
+        transform.position = new Vector3(transform.position.x, initialY, transform.position.z);
+        transform.rotation = Quaternion.identity;
+    }
+
+    void Awake()
+    {
+        initialY = transform.position.y;
+    }
+
+    void Start()
+    {
+        Reset();
+    }
+
+    void OnEnable()
+    {
+        Reset();
     }
 
     void Update()
